@@ -1,0 +1,12 @@
+{
+    "name": "gfalvaro/lavanda",
+    "description": "base de datos lavanda",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "App\\Models\\": "app/Models/",
+            "App\\Core\\": "app/Core/"
+        }
+    },
+    "require": {}
+}
