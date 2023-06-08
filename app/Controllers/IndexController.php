@@ -1,18 +1,12 @@
 <?php
 namespace App\Controllers;
+require_once("../vendor/autoload.php");
+use App\Models\Empresa;
 
 class IndexController extends BaseController{
-    public function IndexAction()
-    {
-        $data = array("message" => "Hola Mundo");
-        $this->renderHTML("../views/index_view.php", $data);
-    }
-
-    public function SaludaAction($request){
-        $nombre = explode("/", $request);
-        $data = array("message" => "Hola $nombre[2]");
+    public function IndexAction(){
+        $empresa = Empresa::getInstancia();
+        $data['empresas'] = $empresa->getAll();
         $this->renderHTML("../views/index_view.php", $data);
     }
 }
-
-?>

@@ -13,10 +13,9 @@ abstract class DBAbstractModel
     protected $conn; //Manejador de la BD
 
     protected $query;
-    protected $parametros = array();
-    protected $rows = array(); //array con los datos de salida
+    protected $parametros = [];
+    protected $rows = []; //array con los datos de salida
     //Metodos abstractos para implementar en los diferentes módulos.
-
 
     abstract protected function get();
     abstract protected function set();
@@ -26,9 +25,9 @@ abstract class DBAbstractModel
 
     protected function open_connection()
     {
-        $dsn = 'mysql:host='.self::$db_host.';'
-                .'dbname='.self::$db_name.';'
-                .'port='.self::$db_port;
+        $dsn = 'mysql:host=' . self::$db_host . ';'
+            . 'dbname=' . self::$db_name . ';'
+            . 'port=' . self::$db_port;
         try {
             $this->conn = new \PDO(
                 $dsn,
@@ -43,67 +42,37 @@ abstract class DBAbstractModel
         }
     }
     #Método que devuelve el último id introducido.
-    public function lastInsert()
-    {
-        return $this->conn->lastInsertId();
-    }
+    public function lastInsert(){ return $this->conn->lastInsertId(); }
+
     # Desconectar la base de datos
-    private function close_connection()
-    {
-        $this->conn = null;
-    }
+    private function close_connection(){ $this->conn = null; }
+
     # Ejecutar un query simple del tipo INSERT, DELETE, UPDATE
     # Consulta que no devuelve tuplas de la tabla
-    protected function execute_single_query()
-    {
-        if ($_POST) {
-            $this->open_connection();
-            print_r($this->query);
-            $this->conn->query($this->query);
-            self:
-            $this->close_connection();
-        } else {
-            $this->mensaje = 'Metodo no permitido';
-        }
+    protected function execute_single_query(){
+        $this->open_connection();
+
+        if( $_stmt = $this->conn->prepare($this->query) )
+            if( $_stmt->execute($this->parametros )) {
+                $this->mensaje = "Operación realizada correctamente";
+            } else {
+                $this->mensaje = "No se ha podido realizar la operación";
+            }
     }
     #Traer resultados de una consulta en un Array
     #Consulta que devuelve tuplas de la tabla.
-    protected function get_results_from_query()
-    {
+    protected function get_results_from_query(){
         $this->open_connection();
-        $_result = false;
-        if (($_stmt = $this->conn->prepare($this->query))) {
-            if (preg_match_all('/(:\w+)/', $this->query, $_named, PREG_PATTERN_ORDER)) {
-                $_named = array_pop($_named);
-                foreach ($_named as $_param) {
-                    $_stmt->bindValue($_param, $this->parametros[substr($_param, 1)]);
-                }
+
+        if( $_stmt = $this->conn->prepare($this->query) )
+            if( $_stmt->execute($this->parametros )) {
+                while( $fila = $_stmt->fetch() )
+                    $this->rows[] = $fila;
             }
-            try {
-                if (!$_stmt->execute()) {
-                    printf("Error de consulta: %s\n", $_stmt->errorInfo()[2]);
-                }
-                else{
-                    $_result = true;
-                }
-                //$_result = $_stmt->fetchAll(\PDO::FETCH_ASSOC);
-                $this->rows = $_stmt->fetchAll(\PDO::FETCH_ASSOC);
-                $_stmt->closeCursor();
-                
-            } catch (\PDOException $e) {
-                printf("Error en consulta: %s\n", $e->getMessage());
-            }
-            return $_result;
-        }
     }
 
     public function get_mensaje()
-    {
-        return $this->mensaje;
-    }
+    { return $this->mensaje; }
 
-    public function set_mensaje($mensaje)
-    {
-       $this->mensaje = $mensaje; 
-    }
+    public function set_mensaje($mensaje){ $this->mensaje = $mensaje; }
 }
