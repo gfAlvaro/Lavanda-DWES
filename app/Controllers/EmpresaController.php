@@ -1,24 +1,14 @@
 <?php
-
+/**
+ * Controlador de la empresa
+ * @author Álvaro García Fuentes
+ */
 namespace App\Controllers;
-
 use App\Models\Empresa;
 
-class EmpresaController extends BaseController
-{
-    public function IndexAction(){
-        $ObjEmpresa = Empresa::getInstancia();
-        $data = $ObjEmpresa->getAll();
-        
-        if (isset($_POST["buscar"])) {
-            $ObjEmpresa->setNombre($_POST["nombre"]);
-            $data = $ObjEmpresa->get();
-        }
-        $this->renderHTML("../views/index_view.php", $data);
-    }
+class EmpresaController extends BaseController{
 
-    public function AddAction()
-    {
+    public static function AddAction(){
         $data['existe'] = false;
         if(  isset( $_POST["nombre"] )  ){
             $ObjEmpresa = Empresa::getInstancia();
@@ -32,17 +22,17 @@ class EmpresaController extends BaseController
             $ObjEmpresa->setValoracion($_POST["valoracion"]);
 
             if( $ObjEmpresa->getPorNombre() )
-                    $data["existe"] = true;
+                $data["existe"] = true;
             else {
                 $ObjEmpresa->set();
                 $data["existe"] = false;
             }
         }
         
-        $this->renderHTML("../views/addempresa_view.php", $data);
+        self::renderHTML("../views/addempresa_view.php", $data);
     }
 
-    public function EditAction(){
+    public static function EditAction(){
         
         if(  !isset( $_GET["id"] )  )
             header("Location: /");
@@ -87,10 +77,10 @@ class EmpresaController extends BaseController
             }
         }
 
-        $this->renderHTML("../views/editempresa_view.php", $data);
+        self::renderHTML("../views/editempresa_view.php", $data);
     }
 
-    public function DeleteAction(){        
+    public static function DeleteAction(){        
         if(  !isset( $_GET["id"] )  )
             header("Location: /");
 
@@ -102,6 +92,6 @@ class EmpresaController extends BaseController
         } catch (\PDOException $e) {
             $data["borrado"] = false;
         }
-        $this->renderHTML( "../views/delempresa_view.php", $data );
+        self::renderHTML( "../views/delempresa_view.php", $data );
     }
 }

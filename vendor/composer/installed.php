@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'gfalvaro/lavanda',
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
-        'reference' => NULL,
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => 'ffb64a682601aa0d377cbe5a7e86732e863bba02',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         'gfalvaro/lavanda' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
-            'reference' => NULL,
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => 'ffb64a682601aa0d377cbe5a7e86732e863bba02',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

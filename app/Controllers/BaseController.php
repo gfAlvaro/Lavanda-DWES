@@ -2,5 +2,5 @@
 namespace App\Controllers;
 
 class BaseController {
-    public function renderHTML( $fileName, $data=[] ){ include($fileName); }
+    public static function renderHTML( $fileName, $data=[] ){ include($fileName); }
 }

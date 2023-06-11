@@ -19,11 +19,11 @@ require("../vendor/autoload.php");
     <br/>
     <a href='empresa/add'>Añadir empresa</a>
     <p>Lista de empresas</p>
+    <table>
+        <tr><th>Id</th><th>Cif</th><th>Nombre</th>
+        <th>Descripcion</th><th>Email</th><th>Teléfono</th><th>Logo</th>
+        <th>Observaciones</th><th>Valoración</th><th>Creado</th><th>Modificado</th></tr>
     <?php
-        echo "<table>";
-        echo "<tr><td>Id</td><td>Cif</td><td>Nombre</td>"
-        ."<td>Descripcion</td><td>Email</td><td>Teléfono</td><td>Logo</td>"
-        ."<td>Observaciones</td><td>Valoración</td><td>Creado</td><td>Modificado</td></tr>";
         foreach( $data['empresas'] as $empresa ){
             echo "<tr>"
             ."<td>$empresa[id]</td><td>$empresa[cif]</td><td>$empresa[nombre]</td>"
@@ -35,11 +35,11 @@ require("../vendor/autoload.php");
             ."<td>$empresa[valoracion]</td>"
             ."<td>$empresa[created_at]</td>"
             ."<td>$empresa[updated_at]</td>"
-            ."<td><a href='empresa/edit/?id=".$empresa['id']."'>edit</a>"
-            ."&nbsp<a href='empresa/del/?id=".$empresa['id']."'>delete</a></td>"
+            ."<td><a href='empresa/edit/?id=".$empresa['id']."'>editar</a>"
+            ."&nbsp<a href='empresa/del/?id=".$empresa['id']."'>borrar</a></td>"
             ."</tr>";
         }
-        echo "</table>";
     ?>
+    </table>
 </body>
 </html>

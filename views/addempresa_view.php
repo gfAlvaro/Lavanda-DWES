@@ -16,15 +16,15 @@
     <h1>Lavanda</h1>
     <h2>Añadir Empresa</h2>
     <form name='empresaAdd' action="" method="POST">
-        <label>cif: <input type="text" name="cif"></label>
-        <label>Nombre: <input type="text" name="nombre"></label>
-        <label>Descripcion: <input type="text" name="descripcion"></label>
-        <label>email: <input type="text" name="email"></label>
-        <label>telefono: <input type="text" name="telefono"></label>
-        <label>logo: <input type="text" name="logo"></label>
-        <label>Observaciones: <input type="text" name="observaciones"></label>
-        <label>Valoracion: <input type="text" name="valoracion"></label>
-        <input type="submit" value="Añadir Empresa">
+        <label>cif: <input type="text" name="cif"></label><br>
+        <label>Nombre: <input type="text" name="nombre"></label><br>
+        <label>Descripcion: <input type="text" name="descripcion"></label><br>
+        <label>email: <input type="text" name="email"></label><br>
+        <label>telefono: <input type="text" name="telefono"></label><br>
+        <label>logo: <input type="text" name="logo"></label><br>
+        <label>Observaciones: <input type="text" name="observaciones"></label><br>
+        <label>Valoracion: <input type="text" name="valoracion"></label><br>
+        <input type="submit" value="Añadir Empresa"><br>
     </form>
     <?php
         if( isset( $_POST['nombre'] ) )
@@ -32,6 +32,6 @@
                 "<p>La empresa ya existe en la BD</p>"
             :   "<p>Empresa añadida a la BD</p>";
     ?>
-        <a href='/'>Volver</a>
+    <a href='/'>Volver</a>
 </body>
 </html>

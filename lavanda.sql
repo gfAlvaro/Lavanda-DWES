@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 27-03-2023 a las 01:49:33
+-- Tiempo de generación: 12-06-2023 a las 00:18:45
 -- Versión del servidor: 10.4.27-MariaDB
 -- Versión de PHP: 8.2.0
 
@@ -62,12 +62,21 @@ CREATE TABLE `empresas` (
   `descripcion` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `telefono` int(255) NOT NULL,
-  `logo` int(255) NOT NULL,
-  `observaciones` int(255) NOT NULL,
-  `valoracion` int(255) NOT NULL,
+  `logo` varchar(255) NOT NULL,
+  `observaciones` varchar(255) NOT NULL,
+  `valoracion` varchar(255) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `empresas`
+--
+
+INSERT INTO `empresas` (`id`, `cif`, `nombre`, `descripcion`, `email`, `telefono`, `logo`, `observaciones`, `valoracion`, `created_at`, `updated_at`) VALUES
+(1, 34, 'Tienda Loli', 'tienda de alimentacion', 'loli@mail.com', 999999999, 'img/logo/loli', 'trato cercano', 'excelente', '2023-06-07 20:47:41', '2023-06-11 21:27:49'),
+(6, 54, 'Ferretería Ana', 'tienda céntrica y espaciosa', 'ana@mail.es', 1111111111, 'img/anaLogo.png', 'productos de calidad', 'buena', '2023-06-07 23:30:52', '2023-06-11 21:27:56'),
+(7, 12, 'Carnicería Paco', 'vende productos cárnicos', 'corredo@mail.com', 123456789, 'img/paco.png', 'buenos precios', 'muy buena', '2023-06-11 21:21:46', '2023-06-11 21:28:33');
 
 -- --------------------------------------------------------
 
@@ -194,7 +203,7 @@ ALTER TABLE `ce`
 -- AUTO_INCREMENT de la tabla `empresas`
 --
 ALTER TABLE `empresas`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `ra`

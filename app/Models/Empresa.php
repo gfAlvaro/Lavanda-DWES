@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * definición de la clase Empresa
+ * @author Álvaro García Fuentes
+ */
     namespace App\Models;
     class Empresa extends DBAbstractModel{
 
@@ -20,10 +23,8 @@
         private function __construct(){}
 
         public static function getInstancia(){
-            if (!isset(self::$instancia)) {
-                $miclase = __CLASS__;
-                self::$instancia = new $miclase;
-            }
+            if ( !self::$instancia instanceof self )
+                self::$instancia = new self;
             return self::$instancia;
         }
     
@@ -62,12 +63,13 @@
 
         public function getMensaje(){ return $this->mensaje; }
 
-        # Crear un nueva empresa
-        public function set(){
-                    
+        /**
+         * insertar una nueva empresa
+         * @return boolean
+         */
+        public function set(){       
             $this->query = "INSERT INTO empresas 
             VALUES(NULL, :cif, :nombre, :descripcion, :email, :telefono, :logo, :observaciones, :valoracion, NULL, NULL)";
-                
             $this->parametros[':cif']= $this->cif;
             $this->parametros[':nombre']= $this->nombre;
             $this->parametros[':descripcion']= $this->descripcion;
@@ -76,66 +78,69 @@
             $this->parametros[':logo']= $this->logo;
             $this->parametros[':observaciones']= $this->observaciones;
             $this->parametros[':valoracion']= $this->valoracion;
-            $this->execute_single_query();
+            try{
+                $this->execute_single_query();
+                return true;
+            }catch(\PDOException $e){
+                return false;
+            }
         }
 
- /** 
-        * @param int nombre. nombre de la empresa.
-        * @return
+        /** 
+        * buscar empresa por nombre
+        * @return boolean
         */
         public function getPorNombre(){
             $this->query = "SELECT * FROM empresas WHERE nombre = :nombre";
             $this->parametros[':nombre']= $this->nombre;
-            $this->get_results_from_query();
-            $encontrado = count($this->rows) == 1;
-            if( $encontrado ){
-               foreach ($this->rows[0] as $propiedad=>$valor)
-                    $this->$propiedad = $valor;
-            
-                $this->mensaje = 'empresa encontrada';
-            } else 
-                $this->mensaje = 'empresa no encontrada';
-
-            return $encontrado;
+            try{
+                $this->get_results_from_query();
+                if( count($this->rows) == 1 ){
+                    foreach ( $this->rows[0] as $propiedad=>$valor )
+                        $this->$propiedad = $valor;
+                    return true;       
+                }
+            }catch(\PDOException $e){}
+            return false;
         }
 
         /** 
-        * @param int id. Identificador de la empresa.
-        * @return
+        * buscar empresa por id
+        * @return boolean
         */
         function get(){
             $this->query = "SELECT * FROM empresas WHERE id = :id";
             $this->parametros[':id']= $this->id;
-            $this->get_results_from_query();
-            $encontrado = count($this->rows) == 1;
-            if( $encontrado ){
-               foreach ($this->rows[0] as $propiedad=>$valor)
-                    $this->$propiedad = $valor;
-                $this->mensaje = 'empresa encontrada';
-            } else 
-                $this->mensaje = 'empresa no encontrada';
-
-            return $encontrado;
+            try{
+                $this->get_results_from_query();
+                if( count($this->rows) == 1 ){
+                    foreach ($this->rows[0] as $propiedad=>$valor)
+                        $this->$propiedad = $valor;
+                    return true;
+                }
+            }catch(\PDOException $e){}
+            return false;
         }
 
+        /**
+         * obtener todas las empresas
+         */
         public function getAll(){
             $this->query = "SELECT * FROM empresas";
-            $this->get_results_from_query();
-            if (count($this->rows) == 1) {
-                foreach ($this->rows[0] as $propiedad => $valor)
-                    $this->$propiedad = $valor;
-                
-                $this->mensaje = 'empresa encontrada';
-            } else
-                $this->mensaje = 'empresa no encontrada';
-
-            return $this->rows;
+            try{
+                $this->get_results_from_query();
+                return $this->rows;
+            }catch(\PDOException $e){
+                return false;
+            }
         }
 
-        # Modificar Empresa
+        /**
+         * actualizar una empresa
+         * @return boolean
+         */
         public function edit(){
             $this->query = "UPDATE empresas SET cif=:cif, nombre=:nombre, descripcion=:descripcion, email=:email, telefono=:telefono, logo=:logo, observaciones=:observaciones, valoracion=:valoracion WHERE id = :id";
-            // $this->parametros['id']=$id;
             $this->parametros['cif']= $this->cif;
             $this->parametros['nombre']= $this->nombre;
             $this->parametros['descripcion']= $this->descripcion;
@@ -144,16 +149,27 @@
             $this->parametros['logo']= $this->logo;
             $this->parametros['observaciones']= $this->observaciones;
             $this->parametros['valoracion']= $this->valoracion;
-            $this->get_results_from_query();
-            $this->mensaje = 'Empresa modificada';
+            try{
+                $this->execute_single_query();
+                return true;
+            }catch(\PDOException $e){
+                return false;
+            }
         }
 
-        # Eliminar una empresa
+        /**
+         * eliminar una empresa
+         * @return boolean
+         */
         public function delete(){
             $this->query = "DELETE FROM empresas WHERE id = :id";
             $this->parametros['id']=$this->id;
-            $this->get_results_from_query();
-            $this->mensaje = 'Empresa eliminada';
+            try{
+                $this->execute_single_query();
+                return true;
+            }catch(\PDOException $e){
+                return false;
+            }
         }
 
     }

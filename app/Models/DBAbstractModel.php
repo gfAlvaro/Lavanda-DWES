@@ -1,21 +1,21 @@
 <?php
+/**
+ * definicion del DBAbstractModel
+ * @autor Álvaro García Fuentes
+ */
 namespace App\Models;
 
-abstract class DBAbstractModel
-{
+abstract class DBAbstractModel {
     private static $db_host = "localhost";
     private static $db_user = "root";
     private static $db_pass = "";
     private static $db_name = "lavanda";
     private static $db_port = "3306";
 
-    protected $mensaje = "";
-    protected $conn; //Manejador de la BD
-
+    protected $conn;
     protected $query;
     protected $parametros = [];
-    protected $rows = []; //array con los datos de salida
-    //Metodos abstractos para implementar en los diferentes módulos.
+    protected $rows = []; 
 
     abstract protected function get();
     abstract protected function set();
@@ -25,9 +25,9 @@ abstract class DBAbstractModel
 
     protected function open_connection()
     {
-        $dsn = 'mysql:host=' . self::$db_host . ';'
-            . 'dbname=' . self::$db_name . ';'
-            . 'port=' . self::$db_port;
+        $dsn = 'mysql:host='.self::$db_host.';'
+            .'dbname='.self::$db_name.';'
+            .'port='.self::$db_port;
         try {
             $this->conn = new \PDO(
                 $dsn,
@@ -51,28 +51,20 @@ abstract class DBAbstractModel
     # Consulta que no devuelve tuplas de la tabla
     protected function execute_single_query(){
         $this->open_connection();
-
-        if( $_stmt = $this->conn->prepare($this->query) )
-            if( $_stmt->execute($this->parametros )) {
-                $this->mensaje = "Operación realizada correctamente";
-            } else {
-                $this->mensaje = "No se ha podido realizar la operación";
-            }
+        $_stmt = $this->conn->prepare($this->query);
+        $_stmt->execute( $this->parametros );
+        $this->close_connection();
     }
     #Traer resultados de una consulta en un Array
     #Consulta que devuelve tuplas de la tabla.
     protected function get_results_from_query(){
         $this->open_connection();
-
-        if( $_stmt = $this->conn->prepare($this->query) )
-            if( $_stmt->execute($this->parametros )) {
+        $this->rows = [];
+        if( $_stmt = $this->conn->prepare( $this->query ) )
+            if( $_stmt->execute( $this->parametros ) )
                 while( $fila = $_stmt->fetch() )
                     $this->rows[] = $fila;
-            }
+
+        $this->close_connection();
     }
-
-    public function get_mensaje()
-    { return $this->mensaje; }
-
-    public function set_mensaje($mensaje){ $this->mensaje = $mensaje; }
 }
